@@ -57,7 +57,7 @@ def find_javaw_pid():
 
     while True:
         exe = entry.szExeFile.decode(errors="ignore").lower()
-        if exe == "javaw.exe":
+        if exe == "javaw.exe": #Minecraft
             kernel32.CloseHandle(snapshot)
             return entry.th32ProcessID
 
