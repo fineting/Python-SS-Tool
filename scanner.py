@@ -1,4 +1,6 @@
+
 import ctypes
+import os
 import subprocess
 
 PROCESS_QUERY_INFORMATION = 0x0400
@@ -102,7 +104,7 @@ def scan_process(pid):
         "Safe Anchor": "Generic Client",
         "BYPASSt/config": "22qq Client",
         "Anchor Macro": "Generic Client",
-        "Double Anchor": "Generic Client"
+        "Double Anchor": "Generic Client",
         "Kill Aura": "Generic Client",
         "Self Destruct": "Generic Client",
         "Aim Assist": "Generic Client",
@@ -113,10 +115,10 @@ def scan_process(pid):
         "Auto Crystal": "Generic Client",
         "Auto Hit Crystal": "Generic Client",
         "1275722588265517056": "Grim Client (Image ID)",
-        "S2lsbCBBdXJh": "KillAura (Base64 Encoded)"
-        "UmVhY2g=": "Reach (Base64 Encoded)"
-        "VHJpZ2dlciBCb3Q=": "TriggerBot (Base64 Encoded)"
-        "QXV0byBDcml0cw==": "AutoCrit (Base64 Encoded)"
+        "S2lsbCBBdXJh": "KillAura (Base64 Encoded)",
+        "UmVhY2g=": "Reach (Base64 Encoded)",
+        "VHJpZ2dlciBCb3Q=": "TriggerBot (Base64 Encoded)",
+        "QXV0byBDcml0cw==": "AutoCrit (Base64 Encoded)",
         "U3BlZWQ=": "Speed (Base64 Encoded)",
         "Rmx5": "Fly (Base64 Encoded)",
         "Tm9GYWxs": "NoFall (Base64 Encoded)",
