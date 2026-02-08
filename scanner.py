@@ -116,7 +116,8 @@ def scan_process(pid):
     reported_signatures = set()  # Track unique signatures to prevent duplicates
 
     print(f"Scanning {GREEN}{exe_name}{RESET} (PID {pid})...\n")
-
+    print(f"Results Can Be False, Check Via Process Hacker")
+    
     while kernel32.VirtualQueryEx(
         handle,
         ctypes.c_void_p(address),
