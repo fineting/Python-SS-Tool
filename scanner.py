@@ -1,6 +1,4 @@
 import ctypes
-import os
-import datetime
 import subprocess
 
 PROCESS_QUERY_INFORMATION = 0x0400
@@ -12,6 +10,7 @@ PAGE_GUARD = 0x100
 
 TH32CS_SNAPPROCESS = 0x00000002
 
+RED = "\033[91m"
 GREEN = "\033[92m"
 RESET = "\033[0m"
 
@@ -57,7 +56,7 @@ def find_javaw_pid():
 
     while True:
         exe = entry.szExeFile.decode(errors="ignore").lower()
-        if exe == "javaw.exe": #Minecraft
+        if exe == "javaw.exe":
             kernel32.CloseHandle(snapshot)
             return entry.th32ProcessID
 
@@ -67,6 +66,18 @@ def find_javaw_pid():
     kernel32.CloseHandle(snapshot)
     return None
 
+def get_exe_name(pid):
+    handle = kernel32.OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, False, pid)
+    if not handle:
+        return "Unknown"
+
+    exe_name_buffer = ctypes.create_string_buffer(260)
+    size = ctypes.c_uint(260)
+    psapi = ctypes.WinDLL("Psapi")
+    psapi.GetModuleFileNameExA(handle, 0, exe_name_buffer, size)
+    kernel32.CloseHandle(handle)
+    return exe_name_buffer.value.decode(errors="ignore").split("\\")[-1]
+
 def scan_process(pid):
     handle = kernel32.OpenProcess(
         PROCESS_QUERY_INFORMATION | PROCESS_VM_READ,
@@ -75,10 +86,11 @@ def scan_process(pid):
     )
 
     if not handle:
-        print("Failed to open javaw.exe")
+        print("Failed to open process")
         return
 
-    # Config For String Scan
+    exe_name = get_exe_name(pid)
+
     targets = {
         "https://grimclient.pl": "Grim Client",
         "https://grimclient.eu": "Grim Client",
@@ -92,15 +104,16 @@ def scan_process(pid):
         "Double Anchor": "Generic Client",
         "Auto Crystal": "Generic Client",
         "Auto Hit Crystal": "Generic Client",
-        "1275722588265517056": "GrimClient (Image ID)",
+        "1275722588265517056": "Grim Client (Image ID)",
     }
 
     encoded_targets = {k.encode(): v for k, v in targets.items()}
 
     mbi = MEMORY_BASIC_INFORMATION()
     address = 0
+    reported_signatures = set()  # Track unique signatures to prevent duplicates
 
-    print(f"Scanning Minecraft (PID {pid})...\n")
+    print(f"Scanning {GREEN}{exe_name}{RESET} (PID {pid})...\n")
 
     while kernel32.VirtualQueryEx(
         handle,
@@ -126,52 +139,27 @@ def scan_process(pid):
                 data = buffer.raw[:bytes_read.value]
 
                 for sig, label in encoded_targets.items():
-                    if sig in data:
-                        print(f"{GREEN}[{label} Found]{RESET} '{sig.decode()}' at 0x{address:X}")
+                    if sig in data and sig not in reported_signatures:
+                        print(f"{RED}[{label} Found]{RESET} '{sig.decode()}' at 0x{address:X}")
+                        reported_signatures.add(sig)
 
         address += mbi.RegionSize
 
     kernel32.CloseHandle(handle)
     print("\nMemory scan finished.\n")
 
-def scan_prefetch_strings():
-    prefetch_dir = r"C:\Windows\Prefetch"
-    if not os.path.exists(prefetch_dir):
-        return
-
-    # Config For Prefetch Scan
-    prefetch_targets = {
-        "GRIMCLIENT": "Grim Client",
-        "GRIM": "Grim Client",
-        "PRESTIGE": "Prestige Client",
-        "METEOR": "Meteor Client",
-        "LIQUIDBOUNCE": "LiquidBounce",
-        "WURST": "Wurst Client",
-        "ARISTOIS": "Aristois Client",
-        "PHOBOS": "Phobos Client",
-        "RUSHERHACK": "RusherHack",
-        "FUTURE": "Future Client",
-        "SALHACK": "SalHack"
-    }
-
-    print("Scanning Prefetch...\n")
-
-    for file in os.listdir(prefetch_dir):
-        upper = file.upper()
-        for sig, label in prefetch_targets.items():
-            if sig in upper:
-                pf_path = os.path.join(prefetch_dir, file)
-                last_run = datetime.datetime.fromtimestamp(os.path.getmtime(pf_path))
-                print(f"{GREEN}[{label} Prefetch Found]{RESET} '{file}' | Last Run: {last_run}")
-
 def prompt_habibi_scan():
-    choice = input("Scan With Habibi (y/N): ").strip().lower()
+    choice = input(f"Scan With Habibi ({GREEN}y{RESET}/{RED}N{RESET}): ").strip().lower()
     if choice == "y":
-        ctypes.windll.kernel32.SetConsoleTitleW("SS Tool · Made By Shrmpee · Credit to Habibi")
+        ctypes.windll.kernel32.SetConsoleTitleW(
+            "SS Tool · Made By Shrmpee · Credit to Habibi"
+        )
         print("\nRunning Habibi scan...\n")
         ps_command = (
             'Set-ExecutionPolicy Bypass -Scope Process; '
-            'Invoke-Expression (Invoke-RestMethod "https://raw.githubusercontent.com/HadronCollision/PowershellScripts/refs/heads/main/HabibiModAnalyzer.ps1")'
+            'Invoke-Expression (Invoke-RestMethod '
+            '"https://raw.githubusercontent.com/HadronCollision/'
+            'PowershellScripts/refs/heads/main/HabibiModAnalyzer.ps1")'
         )
         try:
             subprocess.run(["powershell", "-Command", ps_command], check=True)
@@ -188,5 +176,4 @@ if __name__ == "__main__":
         print("javaw.exe not found")
     else:
         scan_process(pid)
-        scan_prefetch_strings()  # Prefetch scan now shows last run timestamp
-        prompt_habibi_scan()     # Ask user whether to run Habibi scan
+        prompt_habibi_scan()
