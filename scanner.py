@@ -77,6 +77,8 @@ def scan_process(pid):
         print("Failed to open javaw.exe")
         return
 
+# Config For String Scan
+
     targets = {
         "https://grimclient.pl": "Grim Client",
         "https://grimclient.eu": "Grim Client",
@@ -136,6 +138,8 @@ def scan_prefetch_strings():
     prefetch_dir = r"C:\Windows\Prefetch"
     if not os.path.exists(prefetch_dir):
         return
+
+# Config For Prefetch Scan
 
     prefetch_targets = {
         "GRIMCLIENT": "Grim Client",
