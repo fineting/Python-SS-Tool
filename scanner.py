@@ -1,6 +1,7 @@
 import ctypes
 import os
 import datetime
+import subprocess
 
 PROCESS_QUERY_INFORMATION = 0x0400
 PROCESS_VM_READ = 0x0010
@@ -77,8 +78,7 @@ def scan_process(pid):
         print("Failed to open javaw.exe")
         return
 
-# Config For String Scan
-
+    # Config For String Scan
     targets = {
         "https://grimclient.pl": "Grim Client",
         "https://grimclient.eu": "Grim Client",
@@ -139,8 +139,7 @@ def scan_prefetch_strings():
     if not os.path.exists(prefetch_dir):
         return
 
-# Config For Prefetch Scan
-
+    # Config For Prefetch Scan
     prefetch_targets = {
         "GRIMCLIENT": "Grim Client",
         "GRIM": "Grim Client",
@@ -162,9 +161,25 @@ def scan_prefetch_strings():
         for sig, label in prefetch_targets.items():
             if sig in upper:
                 pf_path = os.path.join(prefetch_dir, file)
-                # Get last modified time
                 last_run = datetime.datetime.fromtimestamp(os.path.getmtime(pf_path))
                 print(f"{GREEN}[{label} Prefetch Found]{RESET} '{file}' | Last Run: {last_run}")
+
+def prompt_habibi_scan():
+    choice = input("Scan With Habibi (y/N): ").strip().lower()
+    if choice == "y":
+        ctypes.windll.kernel32.SetConsoleTitleW("SS Tool · Made By Shrmpee · Credit to Habibi")
+        print("\nRunning Habibi scan...\n")
+        ps_command = (
+            'Set-ExecutionPolicy Bypass -Scope Process; '
+            'Invoke-Expression (Invoke-RestMethod "https://raw.githubusercontent.com/HadronCollision/PowershellScripts/refs/heads/main/HabibiModAnalyzer.ps1")'
+        )
+        try:
+            subprocess.run(["powershell", "-Command", ps_command], check=True)
+            print("\nHabibi scan completed.\n")
+        except subprocess.CalledProcessError as e:
+            print(f"\nHabibi scan failed: {e}\n")
+    else:
+        print("\nSkipped Habibi scan.\n")
 
 if __name__ == "__main__":
     pid = find_javaw_pid()
@@ -174,3 +189,4 @@ if __name__ == "__main__":
     else:
         scan_process(pid)
         scan_prefetch_strings()  # Prefetch scan now shows last run timestamp
+        prompt_habibi_scan()     # Ask user whether to run Habibi scan
