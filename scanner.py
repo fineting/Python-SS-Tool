@@ -88,6 +88,8 @@ def scan_process(pid):
         "Double Anchor": "Generic Client",
         "Auto Crystal": "Generic Client",
         "Auto Hit Crystal": "Generic Client",
+	"1275722588265517056":"GrimClient (Image ID)",
+
     }
 
     encoded_targets = {k.encode(): v for k, v in targets.items()}
