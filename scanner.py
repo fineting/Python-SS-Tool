@@ -103,11 +103,11 @@ def scan_process(pid):
         "BYPASSt/config": "22qq Client",
         "Anchor Macro": "Generic Client",
         "Double Anchor": "Generic Client"
-        "Kill Aura": "Generic Client"
-        "Self Destruct": "Generic Client"
-        "Aim Assist": "Generic Client"
-        "Argon": "Argon"
-        "LiquidBounce": "LiquidBounce"
+        "Kill Aura": "Generic Client",
+        "Self Destruct": "Generic Client",
+        "Aim Assist": "Generic Client",
+        "Argon": "Argon",
+        "LiquidBounce": "LiquidBounce",
         "Krypton+": "Krypton",
         "Krypton": "Krypton",
         "Auto Crystal": "Generic Client",
