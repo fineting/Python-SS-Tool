@@ -102,10 +102,43 @@ def scan_process(pid):
         "Safe Anchor": "Generic Client",
         "BYPASSt/config": "22qq Client",
         "Anchor Macro": "Generic Client",
-        "Double Anchor": "Generic Client",
+        "Double Anchor": "Generic Client"
+        "Kill Aura": "Generic Client"
+        "Self Destruct": "Generic Client"
+        "Aim Assist": "Generic Client"
+        "Argon": "Argon"
+        "LiquidBounce": "LiquidBounce"
+        "Krypton+": "Krypton",
+        "Krypton": "Krypton",
         "Auto Crystal": "Generic Client",
         "Auto Hit Crystal": "Generic Client",
         "1275722588265517056": "Grim Client (Image ID)",
+        "S2lsbCBBdXJh": "KillAura (Base64 Encoded)"
+        "UmVhY2g=": "Reach (Base64 Encoded)"
+        "VHJpZ2dlciBCb3Q=": "TriggerBot (Base64 Encoded)"
+        "QXV0byBDcml0cw==": "AutoCrit (Base64 Encoded)"
+        "U3BlZWQ=": "Speed (Base64 Encoded)",
+        "Rmx5": "Fly (Base64 Encoded)",
+        "Tm9GYWxs": "NoFall (Base64 Encoded)",
+        "UGhhc2U=": "Phase (Base64 Encoded)",
+        "V2FsbGhhY2s=": "Wallhack (Base64 Encoded)",
+        "QmxvY2sgRVNQ": "BlockESP (Base64 Encoded)",
+        "UGxheWVyIEVTUA==": "PlayerESP (Base64 Encoded)",
+        "VHJhY2Vycw==": "Tracers (Base64 Encoded)",
+        "SGVhbHRoIEVTUA==": "HealthESP (Base64 Encoded)",
+        "QXJtb3IgRVNQ": "ArmorESP (Base64 Encoded)",
+        "Q2hlc3QgRVNQ": "ChestESP (Base64 Encoded)",
+        "SXRlbSBFU1A=": "ItemESP (Base64 Encoded)",
+        "QXV0byBBcm1vcg==": "AutoArmor (Base64 Encoded)",
+        "SW52ZW50b3J5IE1hbmFnZXI=": "InvManager (Base64 Encoded)",
+        "QW50aUtC": "AntiKB (Base64 Encoded)",
+        "QXV0byBTd29yZA==": "AutoSword (Base64 Encoded)",
+        "V2VhcG9uIFN3aXRjaGVy": "WeaponSwitch (Base64 Encoded)",
+        "Q3JpdGljYWxz": "Criticals (Base64 Encoded)",
+        "S3J5cHRvbg==": "Krypton (Base64 Encoded)",
+        "V2Vyc3Q=": "Wurst (Base64 Encoded)",
+        "SW1wYWN0": "Impact (Base64 Encoded)",
+
     }
 
     encoded_targets = {k.encode(): v for k, v in targets.items()}
