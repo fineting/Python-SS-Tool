@@ -149,7 +149,7 @@ def scan_process(pid):
     print("\nMemory scan finished.\n")
 
 def prompt_habibi_scan():
-    choice = input(f"Scan With Habibi ({GREEN}y{RESET}/{RED}N{RESET}): ").strip().lower()
+    choice = input(f"Scan With Habibi (y/n): ").strip().lower()
     if choice == "y":
         ctypes.windll.kernel32.SetConsoleTitleW(
             "SS Tool · Made By Shrmpee · Credit to Habibi"
