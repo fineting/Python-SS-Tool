@@ -14,6 +14,7 @@ RED = "\033[91m"
 GREEN = "\033[92m"
 RESET = "\033[0m"
 
+os.system('cls' if os.name == 'nt' else 'clear')
 ctypes.windll.kernel32.SetConsoleTitleW("SS Tool · Made By Shrmpee")
 kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
 
