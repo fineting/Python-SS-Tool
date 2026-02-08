@@ -1,4 +1,6 @@
 import ctypes
+import os
+import datetime
 
 PROCESS_QUERY_INFORMATION = 0x0400
 PROCESS_VM_READ = 0x0010
@@ -88,8 +90,7 @@ def scan_process(pid):
         "Double Anchor": "Generic Client",
         "Auto Crystal": "Generic Client",
         "Auto Hit Crystal": "Generic Client",
-	"1275722588265517056":"GrimClient (Image ID)",
-
+        "1275722588265517056": "GrimClient (Image ID)",
     }
 
     encoded_targets = {k.encode(): v for k, v in targets.items()}
@@ -129,7 +130,37 @@ def scan_process(pid):
         address += mbi.RegionSize
 
     kernel32.CloseHandle(handle)
-    print("\nScan finished.")
+    print("\nMemory scan finished.\n")
+
+def scan_prefetch_strings():
+    prefetch_dir = r"C:\Windows\Prefetch"
+    if not os.path.exists(prefetch_dir):
+        return
+
+    prefetch_targets = {
+        "GRIMCLIENT": "Grim Client",
+        "GRIM": "Grim Client",
+        "PRESTIGE": "Prestige Client",
+        "METEOR": "Meteor Client",
+        "LIQUIDBOUNCE": "LiquidBounce",
+        "WURST": "Wurst Client",
+        "ARISTOIS": "Aristois Client",
+        "PHOBOS": "Phobos Client",
+        "RUSHERHACK": "RusherHack",
+        "FUTURE": "Future Client",
+        "SALHACK": "SalHack"
+    }
+
+    print("Scanning Prefetch...\n")
+
+    for file in os.listdir(prefetch_dir):
+        upper = file.upper()
+        for sig, label in prefetch_targets.items():
+            if sig in upper:
+                pf_path = os.path.join(prefetch_dir, file)
+                # Get last modified time
+                last_run = datetime.datetime.fromtimestamp(os.path.getmtime(pf_path))
+                print(f"{GREEN}[{label} Prefetch Found]{RESET} '{file}' | Last Run: {last_run}")
 
 if __name__ == "__main__":
     pid = find_javaw_pid()
@@ -138,3 +169,4 @@ if __name__ == "__main__":
         print("javaw.exe not found")
     else:
         scan_process(pid)
+        scan_prefetch_strings()  # Prefetch scan now shows last run timestamp
